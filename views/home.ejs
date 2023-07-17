@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/134/134914.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <style>
+      body{
+        margin: 0;
+        background-color: #292b37;
+      }
+    </style>
+  </head>
+  <body>
+  <div>
+      <image style="width: 50px;height: 50px;margin: 10px;" src="https://cdn-icons-png.flaticon.com/512/134/134914.png"/>
+      <h6 style="color: white;">Apps-Chats</h6>
+  <br>
+  <h6 id="name" style="color: white"><%=title%></h6>
+  <br>
+  <div>
+    <div style="min-height: 300px ;width: 30%; float: left; background-color: #3e404c">
+      <div id="boxTitle" style="padding: 6px; border: solid 1px #52545f;color: greenyellow;">User online ◦</div>
+      <div id="boxContent" style="padding: 6px; text-align: center">
+        <ul id="userOnline"/>
+      </div>
+    </div>
+    <div style="min-height: 300px;width: 70%; float: right; background-color: #3e404c">
+      <div style="padding: 6px;margin-left: 6px;text-shadow: 0 0 2px white;text-align: center" id="logout">
+        <h6 style="color: white"><%=title%></h6>
+      </div>
+      <div id="listMessage" style="height: 300px;margin: 10px;padding: 6px; ;background-color: #292b37">
+        <ul id="message-container"/>
+      </div>
+      <form id="form" style="margin: 6px;">
+        <input type="text" id="message-input" style="width: 90%;float: left">
+        <button type="submit" style="background-color: #292b37;border: 1px solid #70727f;border-radius: 6px;color: #70727f;width: 10%;float: right">Send</button>
+      </form>
+    </div>
+    </div>
+    </div>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = require('/database/socket')
+    const name = document.querySelector('#name').textContent
+    const chatForm = document.querySelector('#form')
+    const chatMessage = document.querySelector('#message-input')
+    chatForm.addEventListener('submit',(e)=>{
+      e.preventDefault()
+        const message  = chatMessage.value
+        const _name  = name
+        socket.emit('on-chat',{
+          name:_name,
+          message:message,
+          time:new Date()
+        });
+      chatMessage.value =''
+    })
+    const output = document.querySelector('#message-container')
+    socket.on('user-chat',function (message){
+      const chatElement  = document.createElement('li')
+      chatElement.textContent = `${message.name} : ${message.message} : ${message.time}`
+      chatElement.style.color ='#ffffff'
+      chatElement.style.backgroundColor ='#52545f'
+      chatElement.style.border = "1px solid #52545f";
+      chatElement.style.borderRadius = "6px";
+      chatElement.style.padding ='6px'
+      chatElement.style.marginTop ='6px'
+      chatElement.style.listStyle ="none"
+      output.appendChild(chatElement)
+    })
+    //send user online
+    socket.emit('user-online',{
+      userName:name
+    })
+    const userOnline = document.querySelector('#userOnline')
+    socket.on('us-online',function (us_online){
+      us_online.forEach(function (i) {
+        const user = document.createElement('li')
+        user.textContent = i
+        user.style.color ='#ffffff'
+        user.style.backgroundColor ='#3e404c'
+        user.style.border = "1px solid #52545f";
+        user.style.borderRadius = "6px";
+        user.style.padding ='6px'
+        user.style.marginTop ='6px'
+        user.style.listStyle ="none"
+        userOnline.appendChild(user)
+        window.scrollTo(0, document.body.scrollHeight);
+      })
+
+    })
+
+  </script>
+</html>

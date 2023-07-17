@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <style>
+      body{
+        width: 1000px;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <form action="/register_info" method="post" enctype="application/x-www-form-urlencoded">
+
+      <label for="lang-select"><%= title %></label>
+
+      <input class="form-control" type="text" name="fullName" placeholder="Fullname" aria-label="With textarea"></textarea>
+      <input class="form-control" type="date" name="age" placeholder="age" aria-label="With textarea"></textarea>
+      <select class="form-control" name="sex">
+        <option>--Giới tính--</option>
+        <option value="Nam">Nam</option>
+        <option value="Nữ">Nữ</option>
+        <option value="Khác">Khác</option>
+      </select>
+      <input class="form-control" type="text" name="address" placeholder="Address" aria-label="With textarea"></textarea>
+      <input class="form-control" type="text" name="phone" placeholder="Phone" aria-label="With textarea"></textarea>
+      <input class="form-control" type="password" name="passWord" placeholder="Password" aria-label="With textarea"></textarea>
+      <input class="form-control" readonly name="email" value=<%=email%> >
+      <br>
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-outline-primary">Checked</button>
+      </div>
+    </form>
+  <a href="./">Home</a>
+  </body>
+</html>
